@@ -13,4 +13,24 @@ public class Order {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public double getTotalPrice() {
+        return quantity * unitPrice;
+    }
 }

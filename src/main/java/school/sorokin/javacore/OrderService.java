@@ -1,18 +1,23 @@
 package school.sorokin.javacore;
 
-public class OrderService  {
+public class OrderService {
+    private final OrderRepository orderRepository;
 
-    String processOrder(Order order) {
-        return null;
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 
-    // метод, который вызывает saveOrder из репозитория.
-    // Если заказ успешно сохранён, метод возвращает, например, сообщение failed" .
-    // "Order processed successfully" , иначе –
-    // "Order processing
-    double calculateTotal(int id) {
-        return 0;
+    public String processOrder(Order order) {
+        if (order == null) {
+            throw new NullPointerException("Order cannot be null");
+        }
+        int orderId = orderRepository.saveOrder(order);
+        return "Order processed successfully";
     }
-//    метод, который возвращает общую стоимость заказа. За заказом обращается к
-//    репозиторию
+
+    public double calculateTotal(final int orderId) {
+        return orderRepository.getOrderById(orderId)
+                .map(order -> order.getQuantity() * order.getUnitPrice())
+                .orElse(0.0);
+    }
 }
