@@ -9,9 +9,8 @@ public class OrderService {
 
     public String processOrder(Order order) {
         if (order == null) {
-            throw new NullPointerException("Order cannot be null");
+            throw new IllegalArgumentException("Order cannot be null");
         }
-        int orderId = orderRepository.saveOrder(order);
         return "Order processed successfully";
     }
 

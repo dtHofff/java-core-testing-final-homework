@@ -2,10 +2,10 @@ package school.sorokin.javacore;
 
 public class Order {
 
-    final int id;
-    final String productName;
-    final int quantity;
-    final double unitPrice;
+    private final int id;
+    private final String productName;
+    private final int quantity;
+    private final double unitPrice;
 
     public Order(int id, String productName, int quantity, double unitPrice) {
         this.id = id;

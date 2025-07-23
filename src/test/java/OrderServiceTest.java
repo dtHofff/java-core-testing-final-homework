@@ -7,7 +7,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class OrderServiceTest {
+class OrderServiceTest {
 
     private OrderRepository orderRepository;
     private OrderService orderService;
@@ -20,7 +20,7 @@ public class OrderServiceTest {
 
     // ✅ Успешная обработка заказа
     @Test
-    public void testProcessOrderSuccess() {
+    void testProcessOrderSuccess() {
         Order order = new Order(0, "Laptop", 2, 1500.0);
         when(orderRepository.saveOrder(order)).thenReturn(2);
 
@@ -32,15 +32,15 @@ public class OrderServiceTest {
 
     // ❌ Неудачная обработка заказа (исключение)
     @Test
-    public void testProcessOrderFailureDueToException() {
+    void testProcessOrderFailureDueToException() {
         Order order = new Order(0, "Monitor", 1, 200.0);
-        when(orderRepository.saveOrder(order)).thenThrow(new RuntimeException("DB error"));
+        when(orderRepository.saveOrder(order)).thenThrow(new RuntimeException("Order processing failed"));
 
         String result;
         try {
             result = orderService.processOrder(order);
         } catch (Exception e) {
-            result = "Order processing failed";
+            result = e.getMessage();
         }
 
         assertEquals("Order processing failed", result);
@@ -48,7 +48,7 @@ public class OrderServiceTest {
 
     // ✅ Успешное вычисление стоимости
     @Test
-    public void testCalculateTotalSuccess() {
+    void testCalculateTotalSuccess() {
         Order order = new Order(5, "Mouse", 3, 100.0);
         when(orderRepository.getOrderById(5)).thenReturn(Optional.of(order));
 
@@ -60,7 +60,7 @@ public class OrderServiceTest {
 
     // ⚠ Заказ не найден
     @Test
-    public void testCalculateTotalOrderNotFound() {
+    void testCalculateTotalOrderNotFound() {
         when(orderRepository.getOrderById(99)).thenReturn(Optional.empty());
 
         double total = orderService.calculateTotal(99);
@@ -71,7 +71,7 @@ public class OrderServiceTest {
 
     // 🧮 Корректное вычисление с нулевым количеством
     @Test
-    public void testCalculateTotalZeroQuantity() {
+    void testCalculateTotalZeroQuantity() {
         Order order = new Order(7, "Keyboard", 0, 100.0);
         when(orderRepository.getOrderById(7)).thenReturn(Optional.of(order));
 
@@ -82,7 +82,7 @@ public class OrderServiceTest {
 
     // 🧮 Корректное вычисление с нулевой ценой
     @Test
-    public void testCalculateTotalZeroPrice() {
+    void testCalculateTotalZeroPrice() {
         Order order = new Order(8, "Speaker", 2, 0.0);
         when(orderRepository.getOrderById(8)).thenReturn(Optional.of(order));
 
@@ -93,7 +93,7 @@ public class OrderServiceTest {
 
     // ❌ Обработка null-заказа
     @Test
-    public void testProcessOrderNullOrder() {
-        assertThrows(NullPointerException.class, () -> orderService.processOrder(null));
+    void testProcessOrderNullOrder() {
+        assertThrows(IllegalArgumentException.class, () -> orderService.processOrder(null));
     }
 }
